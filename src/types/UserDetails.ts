@@ -9,3 +9,8 @@ export interface verifyDataTypes{
   email: string;
   code: string;
 }
+
+export interface signInDataTypes{
+  email: string;
+  password: string;
+}
