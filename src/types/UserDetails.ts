@@ -4,3 +4,8 @@ export interface UserDataTypes{
   email: string;
   password: string;
 }
+
+export interface verifyDataTypes{
+  email: string;
+  code: string;
+}
