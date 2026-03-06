@@ -2,13 +2,13 @@ import useBackend from '../hook/useBackend';
 import '../styles/PageStyle.css'
 import React, { useState } from 'react';
 
-// import { useNavigate } from 'react-router-dom';
 
 export const SignUp = () => {
 
   const { formData, setFormData, handleRegister, error } = useBackend()
 
   const [file, setFile] = useState<File | undefined>();
+ 
 
   function handleProfile(e: React.ChangeEvent<HTMLInputElement>) {
     if (e.target.files != null) {
