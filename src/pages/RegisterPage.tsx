@@ -5,7 +5,7 @@ import '../styles/PageStyle.css'
 
 export const SignUp = () => {
 
-  const { formData, setFormData, handleRegister, error,uploading,handleUpload,setFile,file } = useBackend()
+  const { formData, setFormData, handleRegister, error,uploading,handleUpload,setFile,file,sendOtp } = useBackend()
 
   // const [file, setFile] = useState<File | undefined>();
  
@@ -36,8 +36,8 @@ export const SignUp = () => {
            <button onClick={handleUpload} disabled={!file || uploading}> {uploading ? 'Uploading…' : 'Upload'}</button>
         </div>
         
-       
-        <button className="register-button" onClick={() => { handleRegister(formData) }}>Sign Up</button>
+       <button className="register-button" onClick={ ()=>{ sendOtp(formData) }}>Sign UP</button>
+        <button className="register-button" onClick={() => { handleRegister(formData) }}>send OTP</button>
         {error && <p className="error-text">{error}</p>}
         <p>Already have an account <a href="/verify">SignUp</a></p>
       </div>
