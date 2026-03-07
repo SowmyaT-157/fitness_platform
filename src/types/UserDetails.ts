@@ -3,6 +3,7 @@ export interface UserDataTypes{
   name: string;
   email: string;
   password: string;
+  image:string;
 }
 
 export interface verifyDataTypes{
