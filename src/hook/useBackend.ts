@@ -18,7 +18,7 @@ const useBackend = () =>{
         })
       const [verifyForm, setVerifyForm] = useState<verifyDataTypes>({
         email:'',
-        code:''
+        otp:''
       });
     
       const handleRegister = async (data:UserDataTypes) => {
@@ -35,7 +35,7 @@ const useBackend = () =>{
               body: JSON.stringify({ ...formData, id: formData.id }),
            });
            setUserValues([...userValues, { ...formData }]);
-           navigate('/verify');
+           alert("you have sended verification link please click for otp")
         }
         }catch{
           alert("the user details not added to the db")
@@ -46,15 +46,15 @@ const useBackend = () =>{
      const handleVerification = async (data:verifyDataTypes) => {
         console.log('coming the register data..', data);
         try{
-            if (!data.email || !data.code) {
+            if (!data.email || !data.otp) {
               return alert("please enter the all fields");
             }else{
                const responseData = await fetch(`http://localhost:3006/verify`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email: data.email, code: data.code  }),
+                    body: JSON.stringify({ email: data.email, otp: data.otp  }),
                });
-              
+              console.log(responseData, "response comming")
                if(!responseData){
                 return "verification failed"
                }else{
@@ -87,6 +87,11 @@ const useBackend = () =>{
           alert("the email and password not matched to user")
         }
 
+    }
+
+    const sendOtp = async(data:UserDataTypes) =>{
+        handleRegister(data)
+        navigate('/verify');
     }
 
 
@@ -144,7 +149,8 @@ const useBackend = () =>{
        handleUpload,
        uploading,
        file,
-       setFile
+       setFile,
+       sendOtp
     }
 }
 export default useBackend;
