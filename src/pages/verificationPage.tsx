@@ -22,9 +22,9 @@ export const Verify = () => {
             <input 
               type="password" 
               placeholder="code"
-              value={verifyForm.code} 
+              value={verifyForm.otp} 
               onChange={e=>{
-                setVerifyForm({...verifyForm,code:e.target.value})
+                setVerifyForm({...verifyForm,otp:e.target.value})
             }} />
             <button className="register-button"onClick={()=>{handleVerification(verifyForm)}}>Verify</button>
         </div>
