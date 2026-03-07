@@ -5,13 +5,16 @@ import { useNavigate } from "react-router-dom";
 
 const useBackend = () =>{
       const navigate = useNavigate();
+      const [file, setFile] = useState<File | null>(null);
+      const [uploading, setUploading] = useState(false);
       const [error, setError] = useState('');
       const [userValues, setUserValues] = useState<UserDataTypes[]>([])
       const [formData,setFormData] = useState<UserDataTypes>({
           id:'',
           name: '',
           email: '',
-          password: ''
+          password: '',
+          image:'',
         })
       const [verifyForm, setVerifyForm] = useState<verifyDataTypes>({
         email:'',
@@ -56,7 +59,7 @@ const useBackend = () =>{
                 return "verification failed"
                }else{
                 alert("successfully verified the email")
-                navigate('/signIn');
+                navigate('/home');
                 return "successfully verified"
                 
                }
@@ -85,6 +88,48 @@ const useBackend = () =>{
         }
 
     }
+
+
+ 
+
+  const handleUpload = async () => {
+    if (!file) {
+       alert('No file selected');
+       return;
+    }
+    try {
+       setUploading(true);
+       const imageRes = await fetch(`http://localhost:3006/image?contentType=${encodeURIComponent(file.type)}`, {
+         method: 'PUT' 
+       });
+
+       if (!imageRes.ok) {
+         throw new Error(`Server responded with ${imageRes.status}`);
+       }
+
+       const { uploadURL, fileName } = await imageRes.json();
+    
+       const upload = await fetch(uploadURL, {
+         method: 'PUT',
+         headers: { 'Content-Type': file.type },
+         body: file,
+       });
+    
+       if (!upload.ok) {
+          alert('Upload to S3 failed!');
+          return;
+       }
+       alert(`file uploaded successfully! ${fileName}`);
+     } catch (err) {
+       console.error("Upload Error:", err); 
+       alert('Upload failed, check the console for details');
+     } finally {
+       setUploading(false);
+       setFile(null);
+     }
+}
+
+
     
     return{
        handleRegister,
@@ -95,7 +140,11 @@ const useBackend = () =>{
        verifyForm,
        setVerifyForm,
        handleVerification,
-       handleLogin
+       handleLogin,
+       handleUpload,
+       uploading,
+       file,
+       setFile
     }
 }
 export default useBackend;
