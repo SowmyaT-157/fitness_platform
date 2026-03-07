@@ -1,21 +1,21 @@
 import useBackend from '../hook/useBackend';
 import '../styles/PageStyle.css'
-import React, { useState } from 'react';
+
 
 
 export const SignUp = () => {
 
-  const { formData, setFormData, handleRegister, error } = useBackend()
+  const { formData, setFormData, handleRegister, error,uploading,handleUpload,setFile,file } = useBackend()
 
-  const [file, setFile] = useState<File | undefined>();
+  // const [file, setFile] = useState<File | undefined>();
  
 
-  function handleProfile(e: React.ChangeEvent<HTMLInputElement>) {
-    if (e.target.files != null) {
-      setFile(e.target.files[0]);
-    }
-  }
-  const fileSrc = file ? URL.createObjectURL(file) : undefined;
+  // function handleProfile(e: React.ChangeEvent<HTMLInputElement>) {
+  //   if (e.target.files != null) {
+  //     setFile(e.target.files[0]);
+  //   }
+  // }
+  // const fileSrc = file ? URL.createObjectURL(file) : undefined;
 
   return (
     <div className='main' data-test-id="SignUp-form">
@@ -32,9 +32,11 @@ export const SignUp = () => {
         <input type="password" placeholder="password" value={formData.password} onChange={e => setFormData({ ...formData, password: e.target.value })} />
         <label>Profile Image:</label>
         <div>
-          <input type="file" onChange={() => handleProfile} />
-          <img src={fileSrc} alt="profile" />
+           <input type="file"accept="image/jpeg" onChange={(e) => setFile(e.target.files?.[0] || null)}/>
+           <button onClick={handleUpload} disabled={!file || uploading}> {uploading ? 'Uploading…' : 'Upload'}</button>
         </div>
+        
+       
         <button className="register-button" onClick={() => { handleRegister(formData) }}>Sign Up</button>
         {error && <p className="error-text">{error}</p>}
         <p>Already have an account <a href="/verify">SignUp</a></p>
