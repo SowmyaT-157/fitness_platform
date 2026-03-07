@@ -8,7 +8,7 @@ export interface UserDataTypes{
 
 export interface verifyDataTypes{
   email: string;
-  code: string;
+  otp: string;
 }
 
 export interface signInDataTypes{
