@@ -7,16 +7,6 @@ export const SignUp = () => {
 
   const { formData, setFormData, handleRegister, error,uploading,handleUpload,setFile,file,sendOtp } = useBackend()
 
-  // const [file, setFile] = useState<File | undefined>();
- 
-
-  // function handleProfile(e: React.ChangeEvent<HTMLInputElement>) {
-  //   if (e.target.files != null) {
-  //     setFile(e.target.files[0]);
-  //   }
-  // }
-  // const fileSrc = file ? URL.createObjectURL(file) : undefined;
-
   return (
     <div className='main' data-test-id="SignUp-form">
       <h3>Fitness-Application</h3>
