@@ -107,6 +107,7 @@ export const BackendProvider = ({ children }: { children: React.ReactNode }) => 
 
   const AWS_REGION = "ap-south-1"
   const S3_BUCKET_NAME = "source-bucket-9odh6y"
+  const S3_BUCKET_NAME2 = "dest-bucket-9odh6y"
 
   const handleUpload = async () => {
     if (!file) {
@@ -122,9 +123,7 @@ export const BackendProvider = ({ children }: { children: React.ReactNode }) => 
       if (!imageRes.ok) {
         console.log("image presigned url not generated")
       }
-
       const { uploadURL, fileName } = await imageRes.json();
-
       const upload = await fetch(uploadURL, {
         method: 'PUT',
         headers: { 'Content-Type': file.type },
@@ -137,8 +136,10 @@ export const BackendProvider = ({ children }: { children: React.ReactNode }) => 
       } else {
 
         const s3Image = `https://${S3_BUCKET_NAME}.s3.${AWS_REGION}.amazonaws.com/${fileName}`;
+        const resizeImg = `https://${S3_BUCKET_NAME2}.s3.${AWS_REGION}.amazonaws.com/${fileName}`;
         setFormData(prev => ({ ...prev, image: s3Image }));
         alert(`Successfully file uploaded`);
+        console.log(resizeImg, "resized image comming")
       }
 
     } catch (err) {
@@ -149,6 +150,46 @@ export const BackendProvider = ({ children }: { children: React.ReactNode }) => 
       setFile(null);
     }
   }
+
+
+  const handleUpdate = async (selectedFile: File) => {
+    if (!selectedFile || !currentUser) return;
+
+    try {
+      setUploading(true);
+      const res = await fetch(`http://localhost:3006/image?contentType=${encodeURIComponent(selectedFile.type)}`, {
+        method: 'PUT'
+      });
+      const { uploadURL, fileName } = await res.json();
+
+      await fetch(uploadURL, {
+        method: 'PUT',
+        headers: { 'Content-Type': selectedFile.type },
+        body: selectedFile,
+      });
+      const updateImgRes = await fetch(`http://localhost:3006/newImage`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: currentUser.email,
+          newImage: fileName
+        }),
+      });
+
+      if (updateImgRes.ok) {
+        const data = await updateImgRes.json();
+        setCurrentUser((prev: any) => ({ ...prev, image: data.imageUrl }));
+        alert("Profile picture updated!");
+      }
+    } catch (err) {
+      console.error("Upload Error:", err);
+    } finally {
+      setUploading(false);
+      setFile(null);
+    }
+  };
+
+
   return (
     <BackendContext.Provider
       value={{
@@ -166,7 +207,8 @@ export const BackendProvider = ({ children }: { children: React.ReactNode }) => 
         file,
         setFile,
         currentUser,
-        sendOtp
+        sendOtp,
+        handleUpdate
       }}
     >
       {children}
