@@ -15,3 +15,9 @@ export interface signInDataTypes{
   email: string;
   password: string;
 }
+
+
+export type newImageTypes = {
+    email:string;
+    selectedFile:string;
+}
