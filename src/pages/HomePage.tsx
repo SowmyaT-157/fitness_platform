@@ -1,9 +1,11 @@
 import useBackend from "../hook/useBackend";
 
-
 const HomePage = () => {
-    const { currentUser, setFile, handleUpdate, file, uploading } = useBackend()
+    const { currentUser, setFile, handleUpdate, file, uploading, handleLogout } = useBackend()
     console.log("image comming", currentUser)
+    if (!currentUser) {
+        return null;
+    }
     return (
         <div>
             <h2>Welcome to home page</h2>
@@ -20,6 +22,7 @@ const HomePage = () => {
                 >
                     {uploading ? 'Updating...' : 'Update'}
                 </button>
+                <button onClick={() => handleLogout()}>logout</button>
 
             </div>
         </div>
