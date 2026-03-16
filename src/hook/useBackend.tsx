@@ -1,5 +1,5 @@
 
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { signInDataTypes, UserDataTypes, verifyDataTypes } from "../types/UserDetails";
 import { useNavigate } from "react-router-dom";
 
@@ -9,7 +9,11 @@ export const BackendProvider = ({ children }: { children: React.ReactNode }) => 
 
   const navigate = useNavigate();
   const [file, setFile] = useState<File | null>(null);
-  const [currentUser, setCurrentUser] = useState<any>(null);
+  const [currentUser, setCurrentUser] = useState<any>(()=>{
+     const savedUser = localStorage.getItem("user");
+     return savedUser ? JSON.parse(savedUser) : null;
+  });
+
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState('');
   const [userValues, setUserValues] = useState<UserDataTypes[]>([])
@@ -24,6 +28,16 @@ export const BackendProvider = ({ children }: { children: React.ReactNode }) => 
     email: '',
     otp: ''
   });
+  
+
+useEffect(() => {
+  const savedUser = localStorage.getItem("user");
+  const savedToken = localStorage.getItem("token");
+  if (savedUser && savedToken) {
+    setCurrentUser(JSON.parse(savedUser));
+  }
+}, []);
+
 
   const handleRegister = async (data: UserDataTypes) => {
     console.log('coming the register data..', data);
@@ -85,14 +99,17 @@ export const BackendProvider = ({ children }: { children: React.ReactNode }) => 
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(data),
-        });
+      });
         if (response.ok) {
           const responseData = await response.json();
+          localStorage.setItem('token', responseData.accessToken);
+          localStorage.setItem('user', JSON.stringify(responseData));
           setCurrentUser(responseData)
           navigate('/home');
+        }else{
+         return alert(`failed to the signin`);
         }
-        //  setUserValues([...userValues, { ...formData }]);
-
+        //  setUserValues([...userValues, {...formData}]);
       }
     } catch {
       alert("the email and password not matched to user")
@@ -189,6 +206,13 @@ export const BackendProvider = ({ children }: { children: React.ReactNode }) => 
     }
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    setCurrentUser(null);
+    navigate('/');
+  };
+
 
   return (
     <BackendContext.Provider
@@ -208,7 +232,9 @@ export const BackendProvider = ({ children }: { children: React.ReactNode }) => 
         setFile,
         currentUser,
         sendOtp,
-        handleUpdate
+        handleUpdate,
+        handleLogout,
+        
       }}
     >
       {children}
