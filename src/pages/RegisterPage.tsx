@@ -2,11 +2,8 @@ import useBackend from '../hook/useBackend';
 import '../styles/PageStyle.css'
 
 
-
 export const SignUp = () => {
-
   const { formData, setFormData, handleRegister, error,uploading,handleUpload,setFile,file,sendOtp } = useBackend()
-
   return (
     <div className='main' data-test-id="SignUp-form">
       <h3>Fitness-Application</h3>
