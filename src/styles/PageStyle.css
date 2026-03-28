@@ -1,0 +1,62 @@
+
+.form{
+    background-color: gray;
+    display:grid;
+    padding:20px;
+    width:30%;
+    height:60%;
+    margin-right: 30%;
+    margin-top: 10%;
+    
+}
+input{
+    padding: 10px;
+    border-radius:5px;
+    margin-right: 10px;
+}
+.register-button{
+    padding:8px;
+    border-radius: 8px;
+    width:80px;
+    margin-left: 40%;
+    margin-top: 20px;
+
+}
+label{
+    font-family: cursive;
+}
+
+.new-account{
+    display: flex;
+    justify-content: space-around;
+}
+/* .login-page{
+   display: flex;
+   align-items: center;
+   background-color: antiquewhite;
+} */
+h3{
+    font-family: cursive;
+    text-align: center;
+}
+p{
+    text-align: center;
+}
+.name-container{
+    display: flex;
+    justify-content: space-between
+   
+}
+.first-name{
+    width: 150px;
+}
+.last-name{
+    width: 150px;
+}
+.main{
+    align-items: center;
+  
+}
+.head{
+    text-align: center;
+}
