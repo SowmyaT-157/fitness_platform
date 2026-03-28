@@ -3,6 +3,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { signInDataTypes, UserDataTypes, verifyDataTypes } from "../types/UserDetails";
 import { useNavigate } from "react-router-dom";
 
+const API_URL = process.env.REACT_APP_API_URL || "http://13.233.101.116:3006";
 
 const BackendContext = createContext<any>(null);
 export const BackendProvider = ({ children }: { children: React.ReactNode }) => {
@@ -47,7 +48,7 @@ useEffect(() => {
         return alert("please enter the all fields");
       } else {
         console.log("formdata", formData)
-        const response = await fetch(`http://localhost:3006/signUp`, {
+        const response = await fetch(`${API_URL}/signUp`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(data),
@@ -68,7 +69,7 @@ useEffect(() => {
       if (!data.email || !data.otp) {
         return alert("please enter the all fields");
       } else {
-        const responseData = await fetch(`http://localhost:3006/verify`, {
+        const responseData = await fetch(`${API_URL}/verify`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email: data.email, otp: data.otp }),
@@ -95,7 +96,7 @@ useEffect(() => {
         return alert("please enter the all fields");
       } else {
         console.log("formdata", formData)
-        const response = await fetch(`http://localhost:3006/signIn`, {
+        const response = await fetch(`${API_URL}/signIn`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(data),
@@ -133,7 +134,7 @@ useEffect(() => {
     }
     try {
       setUploading(true);
-      const imageRes = await fetch(`http://localhost:3006/image?contentType=${encodeURIComponent(file.type)}`, {
+      const imageRes = await fetch(`${API_URL}/image?contentType=${encodeURIComponent(file.type)}`, {
         method: 'PUT'
       });
 
@@ -174,7 +175,7 @@ useEffect(() => {
 
     try {
       setUploading(true);
-      const res = await fetch(`http://localhost:3006/image?contentType=${encodeURIComponent(selectedFile.type)}`, {
+      const res = await fetch(`${API_URL}/image?contentType=${encodeURIComponent(selectedFile.type)}`, {
         method: 'PUT'
       });
       const { uploadURL, fileName } = await res.json();
@@ -184,7 +185,7 @@ useEffect(() => {
         headers: { 'Content-Type': selectedFile.type },
         body: selectedFile,
       });
-      const updateImgRes = await fetch(`http://localhost:3006/newImage`, {
+      const updateImgRes = await fetch(`${API_URL}/newImage`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
